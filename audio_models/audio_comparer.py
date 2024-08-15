@@ -1,6 +1,7 @@
 import librosa
 import audio_processing
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 class AudioCompare:
     def __init__(self, org_audio, test_audio):
@@ -11,17 +12,16 @@ class AudioCompare:
         org_audio_proc = audio_processing.Audio_Processing(self.org_audio).audio_processing()
         test_audio_proc = audio_processing.Audio_Processing(self.test_audio).audio_processing()
 
-        print(org_audio_proc)
-        #org_filename = librosa.ex(org_audio_proc)
-        org_y, org_sr = librosa.load(org_audio_proc)
-        org_matrix = librosa.feature.mfcc(org_y)
+        org_y, org_sr = librosa.load(org_audio_proc, sr = None)
+        org_matrix = librosa.feature.mfcc(y=org_y, sr=org_sr, n_mfcc=13)
 
-        test_filename = librosa.ex(test_audio_proc)
-        test_y, test_sr = librosa.load(test_filename)
-        test_matrix = librosa.feature.mfcc(test_y)
+        test_y, test_sr = librosa.load(test_audio_proc)
+        test_matrix = librosa.feature.mfcc(y=test_y, sr=test_sr, n_mfcc=13)
 
-        return np.linalg.norm(org_matrix, test_matrix)
+        similarity = cosine_similarity(org_matrix.T, test_matrix.T)
+        mean_similarity = np.mean(similarity)
+        return mean_similarity
 
 if __name__ == '__main__':
     audio_comp = AudioCompare('./audio_set/blues_1.wav', './audio_set/blues_1.wav')
-    audio_comp.compare_audio()
+    print(audio_comp.compare_audio())
