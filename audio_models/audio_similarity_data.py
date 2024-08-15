@@ -13,18 +13,19 @@ class AudioNoiseGenerator:
 
         left_channel = audio_raw_data
 
-        gaussian_noise = np.random.normal(3,10, left_channel.shape)
+        gaussian_noise = np.random.normal(5,15, left_channel.shape)
 
         noisy_data = audio_raw_data + gaussian_noise
-
+        
         noisy_audio = AudioSegment(
-            noisy_data.tobytes(),
-            frame_rate,
+            noisy_data.astype(np.int64).tobytes(),
+            frame_rate = frame_rate,
             sample_width = audio.sample_width,
             channels = audio_channels
         )
         
-        noise_filename = audio_processing.Audio_Processing.audio_filename(audio_file) + '.wav'
+        audio_proc = audio_processing.Audio_Processing(audio_file)
+        noise_filename = audio_proc.audio_filename()[0] + '.wav'
         noisy_audio.export(noise_filename, format='wav')
         
         return audio_file

@@ -19,7 +19,8 @@ class Audio_Processing:
         new_filename, fextn = self.audio_filename()
         audio_file = AudioSegment.from_file(self.audio)
         file_content = self.audio
-        if fextn != 'wav':
+        print(fextn)
+        if fextn != '.wav':
             file_content = new_filename + '.wav'
             audio_file.export(file_content, format='wav')
         return file_content

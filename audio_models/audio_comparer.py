@@ -23,5 +23,5 @@ class AudioCompare:
         return mean_similarity
 
 if __name__ == '__main__':
-    audio_comp = AudioCompare('./audio_set/blues_1.wav', './audio_set/blues_1.wav')
+    audio_comp = AudioCompare('./audio_set/blues_1.wav', './audio_set/blues_1_0.wav')
     print(audio_comp.compare_audio())
